@@ -50,7 +50,7 @@ var requestHandler = function (request, response) {
       body = Buffer.concat(body).toString();
       body = JSON.parse(body);
       messageArray.push(body);
-      console.log('What is messageArray', messageArray);
+      // console.log('What is messageArray', messageArray);
     });
 
     statusCode = 201;
@@ -116,5 +116,5 @@ var requestHandler = function (request, response) {
 
 
 // module.exports = { requestHandler };
-module.exports = { requestHandler: requestHandler };
+module.exports = { requestHandler: requestHandler, messageArray: messageArray };
 // exports.handleRequest = requestHandler;

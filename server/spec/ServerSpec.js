@@ -51,7 +51,7 @@ describe('Node Server Request Listener Function', function() {
 
     // Testing for a newline isn't a valid test
     // TODO: Replace with with a valid test
-    // expect(res._data).to.equal(JSON.stringify('\n'));
+    expect(JSON.stringify(res._data)).to.equal(JSON.stringify('End for Post'));
     expect(res._ended).to.equal(true);
   });
 
@@ -91,4 +91,40 @@ describe('Node Server Request Listener Function', function() {
     expect(res._ended).to.equal(true);
   });
 
+  it('Should send back correct message if end point does not exist', function() {
+    var stubMsg = {
+      username: 'Fig',
+      text: 'I love chips!'
+    };
+    var req = new stubs.request('/classes/message', 'POST', stubMsg);
+    var res = new stubs.response();
+
+    handler.requestHandler(req, res);
+    expect(JSON.stringify(res._data)).to.equal(JSON.stringify('Endpoint does not exist'));
+    expect(res._ended).to.equal(true);
+  });
+
+  it('Should add new messages to the server storage', function() {
+    var initialMessageArrayLength = handler.messageArray.length;
+    var stubMsg = {
+      username: 'Harry',
+      text: 'I love chips, too!'
+    };
+    var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+    var res = new stubs.response();
+
+    handler.requestHandler(req, res);
+
+    expect(handler.messageArray.length).to.equal(initialMessageArrayLength + 1);
+    expect(res._ended).to.equal(true);
+  });
+
+  it('Should store messages exactly as they are received from client', function() {
+    var stubMsg = {
+      username: 'Harry',
+      text: 'I ran out of chips :('
+    };
+    var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+    expect(req._postData).to.equal(stubMsg);
+  });
 });
