@@ -22,6 +22,7 @@ var defaultCorsHeaders = {
 var messageArray = [];
 
 var requestHandler = function (request, response) {
+
   // The outgoing status.
   var statusCode;
 
@@ -29,7 +30,13 @@ var requestHandler = function (request, response) {
   var headers = defaultCorsHeaders;
   headers['Content-Type'] = 'text/plain';
 
-  // If endpoint is '/classes/messages' then statusCode is 200, otherwise return 404
+  if (request.method === 'OPTIONS') {
+    statusCode = 200, 'OK';
+    response.writeHead(statusCode, headers);
+    response.end();
+  }
+
+  // If endpoint is not '/classes/messages', return statusCode 404
   if (request.url !== '/classes/messages') {
     statusCode = 404;
     response.writeHead(statusCode, headers);
@@ -50,7 +57,6 @@ var requestHandler = function (request, response) {
       body = Buffer.concat(body).toString();
       body = JSON.parse(body);
       messageArray.push(body);
-      // console.log('What is messageArray', messageArray);
     });
 
     statusCode = 201;
