@@ -58,7 +58,6 @@ var requestHandler = function (request, response) {
       body = JSON.parse(body);
       messageArray.push(body);
     });
-
     statusCode = 201;
     response.writeHead(statusCode, headers);
     response.end('End for Post');
